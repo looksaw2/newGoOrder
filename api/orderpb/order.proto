@@ -1,0 +1,44 @@
+syntax = "proto3";
+package orderpb;
+
+//输出的文件存放的位置
+option go_package = "github.com/looksaw/go-orderv2/common/genproto/order2pb";
+
+import "google/protobuf/empty.proto";
+
+
+//远程的服务
+service OrderService {
+    //创建order
+    rpc CreateOrder(CreateOrderRequest) returns (google.protobuf.Empty);
+    //得到Order
+    rpc GetOrder(GetOrderRequest) returns (Order); 
+    //更新Order
+    rpc UpdateOrder(Order) returns (google.protobuf.Empty);
+}
+
+message CreateOrderRequest{
+    string CustomerID = 1;
+    repeated ItemWithQuantity Item = 2;
+}
+
+message ItemWithQuantity {
+    string ID = 1;
+    int32 Quantity = 2;
+}
+message GetOrderRequest{
+    string OrderID = 1;
+    string CustomerID = 2;
+}
+message Item {
+    string ID = 1;
+    string Name = 2;
+    int32 Quantity = 3;
+    string PriceID = 4;
+}
+message Order {
+    string ID = 1;
+    string CustomerID = 2;
+    string Status = 3;
+    repeated Item Items = 4;
+}
