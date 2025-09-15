@@ -1,4 +1,15 @@
+fallback-grpc-addr: localhost:3030
+
 order:
   service-name: order
   server-to-run: http 
   http-addr: localhost:8282
+  grpc-adde: localhost:5002
+
+stock:
+  service-name: stock
+  server-to-run: grpc
+  http-addr: localhost:8283 
+  grpc-addr: localhost:5003
+
+
