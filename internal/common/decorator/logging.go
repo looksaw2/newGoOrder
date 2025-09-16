@@ -30,5 +30,5 @@ func (q queryLoggingDecorator[C, R]) Handle(ctx context.Context, cmd C) (result 
 }
 
 func generateActionName(cmd any) string {
-	return strings.Split(fmt.Sprintf("%T", cmd), ",")[1]
+	return strings.Split(fmt.Sprintf("%T", cmd), ".")[1]
 }

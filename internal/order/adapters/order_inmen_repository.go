@@ -10,15 +10,27 @@ import (
 	"github.com/sirupsen/logrus"
 )
 
+var fakeData = []*domain.Order{
+
+}
+
 type MemoryOrderRepository struct {
 	lock  *sync.RWMutex
 	store []*domain.Order
 }
 
 func NewMemoryOrderRepository() *MemoryOrderRepository {
+	s := make([]*domain.Order,0)
+	s = append(s, &domain.Order{
+		ID: "fake-ID",
+		CustomerID: "fake-customer-ID",
+		Status: "fake-status",
+		PaymentLink: "fake-payment-link",
+		Item: nil,
+	})
 	return &MemoryOrderRepository{
 		lock:  &sync.RWMutex{},
-		store: make([]*domain.Order, 0),
+		store: s,
 	}
 }
 
