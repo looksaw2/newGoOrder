@@ -2,10 +2,13 @@ package ports
 
 import (
 	"context"
-	"errors"
 
+	//"errors"
+
+	"github.com/looksaw/go-orderv2/common/genproto/stockpb"
 	pb "github.com/looksaw/go-orderv2/common/genproto/stockpb"
 	"github.com/looksaw/go-orderv2/stock/app"
+	"github.com/looksaw/go-orderv2/stock/app/query"
 	"github.com/sirupsen/logrus"
 )
 
@@ -21,18 +24,22 @@ func NewGRPCServer(app app.Application) *GRPCServer {
 }
 
 
-func(g *GRPCServer)GetItems(context.Context, *pb.GetItemsRequest) (*pb.GetItemsResponse, error){
-	logrus.Info("rpc_request_in, stock.GetItems")
-	defer func ()  {
-		logrus.Info("rpc_request_out, stock.GetItems")
-	}()
-	return nil ,errors.New("fake err")
+func(g *GRPCServer)GetItems(ctx context.Context,request *pb.GetItemsRequest) (*pb.GetItemsResponse, error){
+	logrus.Info("Start to get into the stock.ports...")
+	items , err := g.app.Queries.GetItems.Handle(ctx,query.GetItems{ItemIDs: request.ItemIDs})
+	if err != nil {
+		return nil , err
+	}
+	return &stockpb.GetItemsResponse{Items: items} , nil
 }
 
-func(g *GRPCServer)CheckIfItemsInStock(context.Context, *pb.CheckIfItemsInStockRequest) (*pb.CheckIfItemsInStockResponse, error){
-	logrus.Info("rpc_request_in, stock.CheckIfItemsInStock")
-	defer func() {
-		logrus.Info("rpc_request_out, stock.CheckIfItemsInStock")
-	}()
-	return nil , errors.New("fake err")
+func(g *GRPCServer)CheckIfItemsInStock(ctx context.Context,request *pb.CheckIfItemsInStockRequest) (*pb.CheckIfItemsInStockResponse, error){
+	items ,err := g.app.Queries.CheckIfItemInStock.Handle(ctx,query.CheckIfItemsInStock{Items: request.Items})
+	if err != nil {
+		return nil , err
+	}	
+	return &stockpb.CheckIfItemsInStockResponse{
+		InStock: 1,
+		Items: items,
+	},nil
 }

@@ -19,18 +19,20 @@ func NewStockGRPC(client stockpb.StockServiceClient) *StockGRPC {
 }
 
 
-func (s StockGRPC)CheckIfItemInStock(ctx context.Context ,items []*order2pb.ItemWithQuantity)error{
+func (s StockGRPC)CheckIfItemInStock(ctx context.Context ,items []*order2pb.ItemWithQuantity)(*stockpb.CheckIfItemsInStockResponse,error){
 	resp , err := s.client.CheckIfItemsInStock(ctx,&stockpb.CheckIfItemsInStockRequest{
 		Items: items,
 	})
-	logrus.Infof("stock_grpc response ",resp)
-	return err
+	logrus.Info("stock_grpc response ",resp)
+	return resp, err
 }
 
 func (s StockGRPC)GetItems(ctx context.Context,itemIDs []string)([]*order2pb.Item ,error){
 	resp , err := s.client.GetItems(ctx,&stockpb.GetItemsRequest{ItemIDs: itemIDs})
+	logrus.Infof("start to %+v err is %+v",resp,err)
 	if err != nil {
 		return nil ,err
 	}
+	logrus.Infof("Get Items %+v , err is %+v",resp.Items,err)
 	return resp.Items , nil
 }

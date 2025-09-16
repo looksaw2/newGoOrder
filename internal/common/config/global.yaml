@@ -12,4 +12,20 @@ stock:
   http-addr: localhost:8283 
   grpc-addr: localhost:5003
 
+payment:
+  service-name: payment 
+  server-to-run: http
+  http-addr: localhost:8284
+  grpc-addr: localhost:5004 
+
+rabbit-mq:
+  user: guest
+  password: guest
+  host: localhost 
+  port: 5672
+
+consul:
+  addr: localhost:8500
+
+stripe-key: "${STRIPE_KEY}"
 

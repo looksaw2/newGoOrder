@@ -2,6 +2,7 @@ package command
 
 import (
 	"context"
+	"errors"
 
 	"github.com/looksaw/go-orderv2/common/decorator"
 	order2pb "github.com/looksaw/go-orderv2/common/genproto/orderpb"
@@ -49,21 +50,48 @@ func NewCreateOrderHandler(
 
 
 func (c createOrderHandler)Handle(ctx context.Context, cmd CreateOrder)(*CreateOrderResult,error){
-	err := c.stockGRPC.CheckIfItemInStock(ctx,cmd.Items)
-	logrus.Info("createOrderHandler|| err from stockGRPC ",err)
-	var stockResponse []*order2pb.Item
-	for _ , item := range cmd.Items {
-		stockResponse = append(stockResponse, &order2pb.Item{
-			ID: item.ID,
-			Quantity: item.Quantity,
-		})
+	logrus.Info("<Handle> start to order valid")
+	validItems , err := c.validate(ctx,cmd.Items)
+	if err != nil {
+		return nil ,err
 	}
+	logrus.Info("<Handle> start to orderRepo Create")
 	o ,err := c.orderRepo.Create(ctx,&domain.Order{
 		CustomerID: cmd.CustomerID,
-		Item: stockResponse,
+		Item: validItems,
 	})
 	if err != nil {
 		return nil ,err
 	}
+	logrus.Info("finish ... No Error")
 	return &CreateOrderResult{OrderID: o.ID} , nil
+}
+
+func (c createOrderHandler)validate(ctx context.Context,items []*order2pb.ItemWithQuantity)([]*order2pb.Item,error){
+	if len(items) == 0 {
+		logrus.Info("len(items) == 0")
+		return nil , errors.New("must have at least one item")
+	}
+	items = packItems(items)
+	logrus.Info("checckIfItemInStock")
+	resp , err := c.stockGRPC.CheckIfItemInStock(ctx,items)
+	if err != nil {
+		return nil , err
+	}
+	return resp.Items , nil
+}
+
+func packItems(items []*order2pb.ItemWithQuantity) []*order2pb.ItemWithQuantity {
+	merged := make(map[string]int32)
+	for _ , item := range items {
+		merged[item.ID] += item.Quantity
+	}
+	var res []*order2pb.ItemWithQuantity
+	for id , quantity := range merged {
+		res = append(res, &order2pb.ItemWithQuantity{
+			ID: id,
+			Quantity: quantity,
+		})
+	}
+	return  res 
 }

@@ -8,6 +8,7 @@ import (
 	"github.com/looksaw/go-orderv2/order/app"
 	"github.com/looksaw/go-orderv2/order/app/command"
 	"github.com/looksaw/go-orderv2/order/app/query"
+	"github.com/sirupsen/logrus"
 )
 
 type HTTPServer struct{
@@ -20,12 +21,13 @@ func(h HTTPServer)PostCustomerCustomerIdOrders(c *gin.Context, customerId string
 		c.JSON(http.StatusBadRequest,gin.H{"error": err})
 		return 
 	}
+	logrus.Info("request Item is",req.Item)
 	r ,err := h.app.Commands.CreateOrder.Handle(c,command.CreateOrder{
 		CustomerID: req.CustomerID,
 		Items: req.Item,
 	})
 	if err != nil {
-		c.JSON(http.StatusOK,gin.H{"error" : err})
+		c.JSON(http.StatusOK,gin.H{"error" : err,"x" : "This is the Handle err"})
 		return 
 	}
 	c.JSON(http.StatusOK,gin.H{
