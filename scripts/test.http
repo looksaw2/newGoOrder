@@ -1,0 +1,15 @@
+###
+POST http://localhost:8282/api/customer/{customerID}/orders
+Content-Type: application/json
+
+{
+    "CustomerID" : "123123",
+    "Items" : [
+        {"ID" : "item-1","Quantity" : 2},
+        {"ID" : "item-2","Quantity" : 1},
+        {"ID" : "item-3","Quantity" : 3}
+    ]
+}
+
+### 
+GET http://localhost:8282/api/customer/123123/orders/1757994436

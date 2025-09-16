@@ -34,7 +34,7 @@ func NewMemoryOrderRepository() *MemoryOrderRepository {
 	}
 }
 
-func (m MemoryOrderRepository) Create(ctx context.Context, order *domain.Order) (*domain.Order, error) {
+func (m *MemoryOrderRepository) Create(ctx context.Context, order *domain.Order) (*domain.Order, error) {
 	m.lock.Lock()
 	defer m.lock.Unlock()
 	newOrder := &domain.Order{
@@ -52,7 +52,7 @@ func (m MemoryOrderRepository) Create(ctx context.Context, order *domain.Order) 
 	return newOrder, nil
 }
 
-func (m MemoryOrderRepository) Get(ctx context.Context, id string, customerID string) (*domain.Order, error) {
+func (m *MemoryOrderRepository) Get(ctx context.Context, id string, customerID string) (*domain.Order, error) {
 	m.lock.RLock()
 	defer m.lock.RUnlock()
 	for _, o := range m.store {
@@ -65,7 +65,7 @@ func (m MemoryOrderRepository) Get(ctx context.Context, id string, customerID st
 
 }
 
-func (m MemoryOrderRepository) Update(ctx context.Context, order *domain.Order, updateFn func(context.Context, *domain.Order) (*domain.Order, error)) error {
+func (m *MemoryOrderRepository) Update(ctx context.Context, order *domain.Order, updateFn func(context.Context, *domain.Order) (*domain.Order, error)) error {
 	m.lock.Lock()
 	defer m.lock.Unlock()
 	found := false
