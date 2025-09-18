@@ -27,5 +27,5 @@ rabbit-mq:
 consul:
   addr: localhost:8500
 
-stripe-key: "${STRIPE_KEY}"
+stripe-key: 
 

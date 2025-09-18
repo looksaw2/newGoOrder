@@ -5,6 +5,7 @@ import (
 	"encoding/json"
 
 	"github.com/looksaw/go-orderv2/common/genproto/orderpb"
+	"github.com/sirupsen/logrus"
 	"github.com/stripe/stripe-go/v79"
 	"github.com/stripe/stripe-go/v79/checkout/session"
 )
@@ -17,6 +18,7 @@ func NewStrpeProcessor(apiKey string) *StripeProcessor {
 	if apiKey == ""{
 		panic("empty api key")
 	}
+	logrus.Infof("api-key is %s",apiKey)
 	stripe.Key = apiKey
 	return &StripeProcessor{
 		apiKey:apiKey,
@@ -30,7 +32,7 @@ func (s StripeProcessor)CreatePaymentLink(ctx context.Context,order *orderpb.Ord
 	var items []*stripe.CheckoutSessionLineItemParams
 	for _ , item := range order.Items {
 		items = append(items, &stripe.CheckoutSessionLineItemParams{
-			Price: stripe.String(item.PriceID),
+			Price: stripe.String("price_1S7ub20r6AiEyTXk7JXoO2Ty"),
 			Quantity: stripe.Int64(int64(item.Quantity)),
 		})
 	}
