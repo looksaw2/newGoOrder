@@ -25,7 +25,7 @@ const (
 type CreateOrderRequest struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
 	CustomerID    string                 `protobuf:"bytes,1,opt,name=CustomerID,proto3" json:"CustomerID,omitempty"`
-	Item          []*ItemWithQuantity    `protobuf:"bytes,2,rep,name=Item,proto3" json:"Item,omitempty"`
+	Items         []*ItemWithQuantity    `protobuf:"bytes,2,rep,name=Items,proto3" json:"Items,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -67,9 +67,9 @@ func (x *CreateOrderRequest) GetCustomerID() string {
 	return ""
 }
 
-func (x *CreateOrderRequest) GetItem() []*ItemWithQuantity {
+func (x *CreateOrderRequest) GetItems() []*ItemWithQuantity {
 	if x != nil {
-		return x.Item
+		return x.Items
 	}
 	return nil
 }
@@ -326,12 +326,12 @@ var File_orderpb_order_proto protoreflect.FileDescriptor
 
 const file_orderpb_order_proto_rawDesc = "" +
 	"\n" +
-	"\x13orderpb/order.proto\x12\aorderpb\x1a\x1bgoogle/protobuf/empty.proto\"c\n" +
+	"\x13orderpb/order.proto\x12\aorderpb\x1a\x1bgoogle/protobuf/empty.proto\"e\n" +
 	"\x12CreateOrderRequest\x12\x1e\n" +
 	"\n" +
 	"CustomerID\x18\x01 \x01(\tR\n" +
-	"CustomerID\x12-\n" +
-	"\x04Item\x18\x02 \x03(\v2\x19.orderpb.ItemWithQuantityR\x04Item\">\n" +
+	"CustomerID\x12/\n" +
+	"\x05Items\x18\x02 \x03(\v2\x19.orderpb.ItemWithQuantityR\x05Items\">\n" +
 	"\x10ItemWithQuantity\x12\x0e\n" +
 	"\x02ID\x18\x01 \x01(\tR\x02ID\x12\x1a\n" +
 	"\bQuantity\x18\x02 \x01(\x05R\bQuantity\"K\n" +
@@ -380,7 +380,7 @@ var file_orderpb_order_proto_goTypes = []any{
 	(*emptypb.Empty)(nil),      // 5: google.protobuf.Empty
 }
 var file_orderpb_order_proto_depIdxs = []int32{
-	1, // 0: orderpb.CreateOrderRequest.Item:type_name -> orderpb.ItemWithQuantity
+	1, // 0: orderpb.CreateOrderRequest.Items:type_name -> orderpb.ItemWithQuantity
 	3, // 1: orderpb.Order.Items:type_name -> orderpb.Item
 	0, // 2: orderpb.OrderService.CreateOrder:input_type -> orderpb.CreateOrderRequest
 	2, // 3: orderpb.OrderService.GetOrder:input_type -> orderpb.GetOrderRequest

@@ -74,8 +74,9 @@ func (c createOrderHandler)Handle(ctx context.Context, cmd CreateOrder)(*CreateO
 	logrus.Info("<Handle> start to orderRepo Create")
 	o ,err := c.orderRepo.Create(ctx,&domain.Order{
 		CustomerID: cmd.CustomerID,
-		Item: validItems,
+		Items: validItems,
 	})
+	logrus.Infof("<createOrderHandler> o item is %+v ",o)
 	if err != nil {
 		return nil ,err
 	}

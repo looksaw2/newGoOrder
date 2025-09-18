@@ -19,7 +19,7 @@ service OrderService {
 
 message CreateOrderRequest{
     string CustomerID = 1;
-    repeated ItemWithQuantity Item = 2;
+    repeated ItemWithQuantity Items = 2;
 }
 
 message ItemWithQuantity {

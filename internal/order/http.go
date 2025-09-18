@@ -21,10 +21,10 @@ func(h HTTPServer)PostCustomerCustomerIdOrders(c *gin.Context, customerId string
 		c.JSON(http.StatusBadRequest,gin.H{"error": err})
 		return 
 	}
-	logrus.Info("request Item is",req.Item)
+	logrus.Info("request Item is",req.Items)
 	r ,err := h.app.Commands.CreateOrder.Handle(c,command.CreateOrder{
 		CustomerID: req.CustomerID,
-		Items: req.Item,
+		Items: req.Items,
 	})
 	if err != nil {
 		c.JSON(http.StatusOK,gin.H{"error" : err,"x" : "This is the Handle err"})

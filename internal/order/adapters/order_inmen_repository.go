@@ -26,7 +26,7 @@ func NewMemoryOrderRepository() *MemoryOrderRepository {
 		CustomerID: "fake-customer-ID",
 		Status: "fake-status",
 		PaymentLink: "fake-payment-link",
-		Item: nil,
+		Items: nil,
 	})
 	return &MemoryOrderRepository{
 		lock:  &sync.RWMutex{},
@@ -42,7 +42,7 @@ func (m *MemoryOrderRepository) Create(ctx context.Context, order *domain.Order)
 		CustomerID:  order.CustomerID,
 		Status:      order.Status,
 		PaymentLink: order.PaymentLink,
-		Item:        order.Item,
+		Items:        order.Items,
 	}
 	m.store = append(m.store, newOrder)
 	logrus.WithFields(logrus.Fields{
@@ -69,6 +69,9 @@ func (m *MemoryOrderRepository) Update(ctx context.Context, order *domain.Order,
 	m.lock.Lock()
 	defer m.lock.Unlock()
 	found := false
+	defer func(){
+		logrus.Infof("memory_order_repo || orderID=%s || found = %v",order.ID,found)
+	}()
 	for i, o := range m.store {
 		if o.ID == order.ID && o.CustomerID == order.CustomerID {
 			found = true

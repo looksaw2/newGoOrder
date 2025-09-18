@@ -11,7 +11,7 @@ type Order struct {
 	CustomerID  string
 	Status      string
 	PaymentLink string
-	Item        []*order2pb.Item
+	Items        []*order2pb.Item
 }
 
 
@@ -33,7 +33,7 @@ func NewOrder(id string, customerID string ,status string, paymentLink string , 
 		CustomerID: customerID,
 		Status: status,
 		PaymentLink: paymentLink,
-		Item: items,
+		Items: items,
 	},nil
 }
 
@@ -43,7 +43,7 @@ func (o *Order)ToProto() *order2pb.Order {
 		ID: o.ID,
 		CustomerID: o.CustomerID,
 		Status: o.Status,
-		Items: o.Item,
+		Items: o.Items,
 		PaymentLink: o.PaymentLink,
 	}
 }

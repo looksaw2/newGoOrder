@@ -28,7 +28,7 @@ func NewGRPCServer(app app.Application) *GRPCServer {
 func(g GRPCServer)CreateOrder(ctx context.Context, request *pb.CreateOrderRequest) (*emptypb.Empty, error){
 	_ , err := g.app.Commands.CreateOrder.Handle(ctx,command.CreateOrder{
 		CustomerID: request.CustomerID,
-		Items: request.Item,
+		Items: request.Items,
 	})
 	if err != nil {
 		return nil ,status.Error(codes.NotFound,err.Error())
