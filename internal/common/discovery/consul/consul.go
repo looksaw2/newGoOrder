@@ -72,14 +72,20 @@ func(r *Registry)Deregister(ctx context.Context,instanceID string , serviceName 
 	return r.client.Agent().CheckDeregister(instanceID)
 }
 func(r *Registry)Discover(ctx context.Context,serviceName string)([]string,error){
+	logrus.Info("before discovery")
 	entries , _ , err := r.client.Health().Service(serviceName,"",true,nil)
+	logrus.Infof("after discovery is %v",err)
 	if err != nil {
 		return nil ,err
 	}
 	var ips []string
+	if len(entries) == 0 {
+		panic("service is 0 instance")
+	}
 	for _ ,e := range entries {
 		ips = append(ips, fmt.Sprintf("%s:%d",e.Service.Address ,e.Service.Port))
 	}
+	logrus.Infof("%s ips is %v",serviceName,ips)
 	return ips , nil
 }
 func(r *Registry)HealthCheck(instanceID string , serviceName string) error {

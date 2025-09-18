@@ -1,6 +1,10 @@
 package order
 
-import order2pb "github.com/looksaw/go-orderv2/common/genproto/orderpb"
+import (
+	"errors"
+
+	order2pb "github.com/looksaw/go-orderv2/common/genproto/orderpb"
+)
 
 type Order struct {
 	ID          string
@@ -8,4 +12,38 @@ type Order struct {
 	Status      string
 	PaymentLink string
 	Item        []*order2pb.Item
+}
+
+
+func NewOrder(id string, customerID string ,status string, paymentLink string , items []*order2pb.Item)(*Order ,error){
+	if id == ""{
+		return nil ,errors.New("empty id")
+	}
+	if customerID == ""{
+		return nil , errors.New("empty customerID")
+	}
+	if status == ""{
+		return nil ,errors.New("empty status")
+	}
+	if items == nil {
+		return nil ,errors.New("empty items")
+	}
+	return &Order{
+		ID: id,
+		CustomerID: customerID,
+		Status: status,
+		PaymentLink: paymentLink,
+		Item: items,
+	},nil
+}
+
+
+func (o *Order)ToProto() *order2pb.Order {
+	return &order2pb.Order{
+		ID: o.ID,
+		CustomerID: o.CustomerID,
+		Status: o.Status,
+		Items: o.Item,
+		PaymentLink: o.PaymentLink,
+	}
 }

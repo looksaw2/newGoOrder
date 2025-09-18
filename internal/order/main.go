@@ -55,7 +55,7 @@ func main(){
 
 	go server.RunGRPCServer(serviceName,func(server *grpc.Server) {
 		svc := ports.NewGRPCServer(application)
-		order2pb.RegisterOrderServiceServer(server,svc)		
+		orderpb.RegisterOrderServiceServer(server,svc)		
 	})
 	server.RunHTTPServer(serviceName,func(router *gin.Engine) {
 		ports.RegisterHandlersWithOptions(router,HTTPServer{
